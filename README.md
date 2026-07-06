@@ -40,6 +40,8 @@ Gera o site estático em `out/`.
 
 Se um post ainda não tem tradução, ele simplesmente não aparece na listagem daquele idioma (não há fallback automático).
 
+Evite nomear um post com um caminho que colida com uma rota estática existente (por exemplo, `content/pt/posts.mdx` ou `content/pt/about.mdx` conflitariam com `app/pt/posts/page.tsx` e `app/pt/about/page.tsx`), pois isso quebra o build do Next.js.
+
 ## Deploy
 
 Todo push em `main` dispara o workflow `.github/workflows/deploy.yml`, que builda o site e publica em `https://ermerson.github.io`.
