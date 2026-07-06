@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'nextra-theme-blog/style.css';
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
