@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { Footer, Layout, Navbar, ThemeSwitch } from 'nextra-theme-blog'
 import { Head, Search } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
+import { LocaleSwitcher } from '@/components/site/locale-switcher'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default async function RootLayout({
           <Navbar pageMap={await getPageMap()}>
             <Search />
             <ThemeSwitch />
+            <LocaleSwitcher />
           </Navbar>
 
           {children}
