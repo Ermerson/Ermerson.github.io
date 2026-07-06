@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blog Pessoal
 
-## Getting Started
+Blog pessoal bilíngue (pt/en), construído com Next.js, Nextra (`nextra-theme-blog`) e shadcn/ui, publicado no GitHub Pages via GitHub Actions.
 
-First, run the development server:
+Site: https://ermerson.github.io
+
+## Desenvolvimento local
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra http://localhost:3000 — a raiz redireciona para `/pt/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build de produção (export estático)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm build
+```
 
-## Learn More
+Gera o site estático em `out/`.
 
-To learn more about Next.js, take a look at the following resources:
+## Como escrever um novo post
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Crie um arquivo `.mdx` em `content/pt/posts/` (português) e, se for traduzir, outro em `content/en/posts/` (inglês). Os nomes de arquivo não precisam ser iguais entre os dois idiomas.
+2. Adicione o front matter no topo do arquivo:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```mdx
+   ---
+   title: Título do post
+   date: 2026-07-05
+   description: Uma frase descrevendo o post.
+   tags: [tag1, tag2]
+   ---
+   ```
 
-## Deploy on Vercel
+3. Escreva o conteúdo em Markdown/MDX abaixo do front matter. Use `<Note>...</Note>` para destacar um trecho em um card.
+4. Rode `pnpm dev` para conferir localmente, depois abra um Pull Request — o workflow de CI roda lint e build automaticamente.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Se um post ainda não tem tradução, ele simplesmente não aparece na listagem daquele idioma (não há fallback automático).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy
+
+Todo push em `main` dispara o workflow `.github/workflows/deploy.yml`, que builda o site e publica em `https://ermerson.github.io`.
+
+**Configuração necessária no GitHub (uma única vez):** em Settings → Pages, defina "Build and deployment source" como **GitHub Actions**.
