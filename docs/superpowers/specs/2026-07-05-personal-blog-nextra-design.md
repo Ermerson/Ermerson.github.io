@@ -32,12 +32,15 @@ Criar um blog pessoal, hospedado gratuitamente no GitHub Pages, para publicar co
 
 ## 2. Estrutura de conteúdo & i18n
 
-- Idiomas configurados via `i18n: { locales: ['pt', 'en'], defaultLocale: 'pt' }` no `next.config`.
-- Como o site é exportado estaticamente (`output: 'export'`), o middleware/proxy de auto-detecção de idioma do Nextra **não é compatível** e não será usado. Em vez disso, um seletor de idioma manual (componente shadcn `Select`/`DropdownMenu`) alterna entre `/pt/...` e `/en/...`.
-- Posts ficam em `content/posts/`, com um arquivo por idioma seguindo a convenção do Nextra 4 (ex: `content/posts/meu-post.pt.mdx` e `content/posts/meu-post.en.mdx`).
-- Uma tradução que ainda não existe simplesmente não aparece na listagem daquele idioma — **sem fallback automático** entre idiomas, para manter o comportamento simples e prever.
-- Sem taxonomia fixa de categorias: usamos o sistema de **tags livres** já embutido no `nextra-theme-blog` (front-matter `tags: [...]` em cada post).
-- Páginas prontas do tema: `/posts` (lista cronológica), `/tags/:id` (filtro por tag), `/rss.xml` (feed RSS) — uma instância por idioma.
+> **Nota de implementação:** a documentação oficial do Nextra afirma que o roteamento i18n nativo (`i18n: { locales, defaultLocale }`) é "specifically available when using the nextra-theme-docs theme" — não há suporte documentado nem exemplo oficial combinando `nextra-theme-blog` com essa config. Por isso, **não usamos a config `i18n` nativa do Nextra**. Em vez disso, o multi-idioma é implementado manualmente duplicando a árvore de rotas no App Router.
+
+- Duas árvores de rota independentes no App Router: `app/pt/` e `app/en/`, cada uma com seu próprio `layout.tsx` (Navbar, Footer, ThemeSwitch do `nextra-theme-blog`) e seu próprio catch-all `[[...mdxPath]]/page.tsx`.
+- Conteúdo em `content/pt/posts/` e `content/en/posts/`, cada árvore de conteúdo completamente independente (cada uma com seus próprios arquivos `.mdx`, sem sufixo de locale no nome — o idioma já é definido pela pasta).
+- Um post que ainda não tem tradução simplesmente não existe naquela pasta de idioma — **sem fallback automático** entre idiomas, para manter o comportamento simples e previsível.
+- Um seletor de idioma manual (componente shadcn `Select`/`DropdownMenu`) faz link direto entre `/pt/...` e `/en/...` (link estático para a home de cada idioma, já que não há mapeamento garantido 1:1 entre slugs traduzidos).
+- Sem taxonomia fixa de categorias: usamos o sistema de **tags livres** já embutido no `nextra-theme-blog` (front-matter `tags: [...]` em cada post), com uma página `/pt/tags/:id` e `/en/tags/:id` independente por idioma.
+- Páginas por idioma: `/pt/posts` e `/en/posts` (lista cronológica), `/pt/tags/:id` e `/en/tags/:id` (filtro por tag), `/pt/rss.xml` e `/en/rss.xml` (feed RSS) — cada uma gerada a partir da árvore de conteúdo daquele idioma.
+- A raiz do site (`/`) redireciona (via página estática simples, já que não há middleware em export estático) para `/pt` — o idioma padrão.
 
 ## 3. Estilização & uso do shadcn/ui
 
